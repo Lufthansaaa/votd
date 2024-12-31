@@ -13,10 +13,13 @@ bot = discord.Bot()
 @bot.command(description="Fetches the specified Bible verse.")
 @discord.option("version", type=discord.SlashCommandOptionType.string, description="The Bible version to use.")
 @discord.option("book", type=discord.SlashCommandOptionType.string, description="The book of the Bible.")
-@discord.option("chapter", type=discord.SlashCommandOptionType.integer, description="The chapter of the book.")
-@discord.option("verse", type=discord.SlashCommandOptionType.integer, description="The verse number.")
-async def verse(ctx, version: str, book: str, chapter: int, verse: int):
+@discord.option("verse", type=discord.SlashCommandOptionType.string, description="e.g. 3:16, 41:10")
+async def verse(ctx, version: str, book: str, verse: str):
     try:
+        chapter = verse.split(':')[0]
+        chapter = int(chapter)
+        verse = verse.split(':')[1]
+        verse = int(verse)
         url = f"https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles/{version}/books/{book}/chapters/{chapter}/verses/{verse}.json"
         response = requests.get(url)
         data = response.json()
